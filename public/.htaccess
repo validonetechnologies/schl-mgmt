@@ -1,0 +1,16 @@
+# Global Apache Configuration
+# This file handles the routing for the main SaaS site and tenant portals
+
+Options -Indexes
+RewriteEngine On
+
+# 1. Protect sensitive directories
+RewriteRule ^(\.claude|core|config|app/controllers|app/models|app/middleware|storage/logs) - [F,L]
+
+# 2. Handle API requests separately
+RewriteRule ^api/v1/(.*)$ api/v1/index.php [L]
+
+# 3. Route everything else to the front controller
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
